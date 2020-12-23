@@ -1,6 +1,6 @@
 'use strict';
 
-const secretNumber = Math.floor(Math.random() * 5 + 1);
+let secretNumber = Math.floor(Math.random() * 5 + 1);
 
 // console.log(document.querySelector('.message').textContent);
 
@@ -38,9 +38,17 @@ document
     } else if (Number(userInput) === secretNumber) {
       console.log('Sucess!');
       message.textContent = 'Correct!';
-      scoreNumber.textContent = Number(scoreNumber.textContent + 1);
-      document.querySelector('#check').disabled = true;
-      document.querySelector('.guess').disabled = true;
+      scoreNumber.textContent = Number(scoreNumber.textContent) + 1;
+      // document.querySelector('#check').disabled = true;
+      // document.querySelector('.guess').disabled = true;
+      if (
+        Number(scoreNumber.textContent) > Number(highscoreNumber.textContent)
+      ) {
+        highscoreNumber.textContent = scoreNumber.textContent;
+      }
+
+      secretNumber = Math.floor(Math.random() * 5 + 1);
+      console.log(secretNumber);
 
       // Incorrect Validations Below:
     } else if (Number(userInput) > secretNumber) {
