@@ -100,8 +100,33 @@ nav {
 }
 
 @media screen and (max-width: 600px) {
+  nav {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+  }
+  nav button {
+    order: 2;
+    margin-top: 30px;
+  }
+
+  nav:nth-child(2) {
+    order: 1;
+  }
   .score-section {
     flex-direction: column;
+    padding: 0 50px;
+    text-align: left;
+  }
+  .number-check {
+    order: 2;
+  }
+  .score {
+    order: 1;
+  }
+
+  .score p {
+    padding-bottom: 30px;
   }
 }
 

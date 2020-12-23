@@ -1,73 +1,92 @@
 'use strict';
 
-let secretNumber = Math.floor(Math.random() * 5 + 1);
+let secretNumber = Math.floor(Math.random() * 10 + 1);
 
-// console.log(document.querySelector('.message').textContent);
-
-// document.querySelector('.message').textContent = secretNumber;
-
-// document.querySelector('.number').textContent = 20;
-
-// document.querySelector('.guess').value = 24;
-
-let message = document.querySelector('.message');
 const scoreNumber = document.querySelector('.score-number');
 const highscoreNumber = document.querySelector('.highscore-number');
+const message = document.querySelector('.message');
+let score = 10;
+let highscore = 10;
 
-// Function for wrong number efect
-function shakeEffect(element) {
+// Function for wrong number animation
+function shake(element) {
   setTimeout(() => {
-    element.style.color = 'red';
     element.classList.add('shake');
+    element.style.color = 'red';
   }, 100);
+
   element.classList.remove('shake');
 }
 
-// Function for substracting 1 after failed attemp
-const substractNumber = function () {
-  scoreNumber.textContent = Number(scoreNumber.textContent - 1);
-};
+function newContent(element, message) {
+  document.querySelector(element).textContent = message;
+}
 
-// Code for when the button is clicked
-document
-  .querySelector('#check')
-  .addEventListener('click', function checkButton() {
-    let userInput = document.querySelector('.guess').value;
-    if (!userInput) {
-      message.textContent = 'No number!';
-    } else if (Number(userInput) === secretNumber) {
-      console.log('Sucess!');
-      message.textContent = 'Correct!';
-      scoreNumber.textContent = Number(scoreNumber.textContent) + 1;
-      // document.querySelector('#check').disabled = true;
-      // document.querySelector('.guess').disabled = true;
-      if (
-        Number(scoreNumber.textContent) > Number(highscoreNumber.textContent)
-      ) {
-        highscoreNumber.textContent = scoreNumber.textContent;
-      }
+// Guess/Check Button
+document.querySelector('#check').addEventListener('click', function () {
+  let numberByUser = Number(document.querySelector('.guess').value);
 
-      secretNumber = Math.floor(Math.random() * 5 + 1);
-      console.log(secretNumber);
+  console.log(numberByUser);
 
-      // Incorrect Validations Below:
-    } else if (Number(userInput) > secretNumber) {
-      console.log('Number is to high!');
-      message.textContent = 'Number is to high..';
-      shakeEffect(message);
-      substractNumber();
-    } else if (Number(userInput) < secretNumber) {
-      console.log('Number is to low!');
-      message.textContent = 'Number is to low..';
-      shakeEffect(message);
-      substractNumber();
-    } else {
-      console.log('Not a number!');
-      message.textContent = 'Not a number.';
+  // If not a number on the input
+  if (!numberByUser) {
+    console.log('Not a number!');
+    newContent('.message', 'Not a number!');
+    shake(message);
+    // If the number was guessed!
+  } else if (numberByUser === secretNumber) {
+    console.log('Correct');
+    newContent('.message', 'Correct!');
+    newContent('.number', secretNumber);
+    newContent('.score-number', ++score);
+    if (score > highscore) {
+      highscore = score;
+      newContent('.highscore-number', highscore);
     }
-  });
+    message.style.color = 'white';
+    document.body.style.backgroundColor = 'green';
+    document.querySelector('#check').disabled = true;
+    document.querySelector('.guess').disabled = true;
+    // Wrong guess!
+  } else if (numberByUser > secretNumber) {
+    console.log('Too high!');
+    newContent('.message', 'Too high!');
+    shake(message);
+    newContent('.score-number', --score);
+  } else if (numberByUser < secretNumber) {
+    console.log('Too low!');
+    newContent('.message', 'Too low!');
+    shake(message);
+    newContent('.score-number', --score);
+  }
+});
 
 //   Reset Button
+document.querySelector('.reset').addEventListener('click', function () {
+  message.textContent = 'Start guessing...';
+  message.style.color = 'white';
+  document.querySelector('.guess').value = '';
+  document.querySelector('#check').disabled = false;
+  document.querySelector('.guess').disabled = false;
+  document.body.style.backgroundColor = '#222222';
+  secretNumber = Math.floor(Math.random() * 5 + 1);
+  console.log(secretNumber);
+});
+
+var number = document.querySelector('.guess');
+
+// Listen for input event on numInput.
+number.onkeydown = function (e) {
+  if (
+    !(
+      (e.keyCode > 95 && e.keyCode < 106) ||
+      (e.keyCode > 47 && e.keyCode < 58) ||
+      e.keyCode == 8
+    )
+  ) {
+    return false;
+  }
+};
 
 console.log(secretNumber);
 console.log(scoreNumber.textContent);
